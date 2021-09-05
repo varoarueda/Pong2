@@ -114,6 +114,9 @@ class Bola(Movil): # Ahora HEREDA de Movil
         if self.arriba <= 0:  # Antes de los property :"if self.y"
             self.swArriba = False # Velocidad hacia abajo
 
+    def comprobar_choque(self, algo): # Método para detectar choque raqueta/bola. "algo", será un Movil
+        return self.derecha >= algo.izquierda and self.izquierda <= algo.derecha and self.abajo >= algo.arriba and self.arriba <= algo.abajo # Condición que define que ha chocado, es True
+
 
 class Game():
     def __init__(self): # Contructor
@@ -173,6 +176,11 @@ class Game():
                 #self.bolas[i].actualizate()
             for movil in self.todos: # Iteración para actualizar los personajes. Cuando le toque a bola, ejecuta el def actualizate() de la clase Bola. Cuando le toque a la raqueta (no tiene método actualizate, cogerá el de Movil)
                 movil.procesa_eventos() # Aprovecha la iteración para procesar los eventos de raqueta (sustituye a los 2 parrafos comentados de arriba)
+
+            if self.bola.comprobar_choque(self.player1) or self.bola.comprobar_choque(self.player2): # Mete el detectar choque en el bucle (self.player 1/2 es el "algo" del método comprobar choque en la clase Bola)
+                self.bola.swDerecha = not self.bola.swDerecha # swDerecha es quien define la dirección de la bola, pues si hay choque, pasa de True a False y la bola cambia de dirección
+
+            for movil in self.todos:
                 movil.actualizate()
 
 
